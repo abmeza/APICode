@@ -22,15 +22,13 @@ playlist_id = '37i9dQZF1DXcBWIGoYBM5M'  # Todays top hits 50
 headers = {
     'Authorization': 'Bearer {token}'.format(token=access_token)
 }
-playlist_res = requests.get(BASE_url + 'playlists/' + playlist_id,
-    headers = headers)
+playlist_res = requests.get(BASE_url + 'playlists/' + 
+        playlist_id, headers = headers)
 playlist = playlist_res.json()
 print(playlist["id"])
 
-
-
-# PRINT OUT information about the playlist
-print("10 songs on the top hits:")
+# Print out information about the playlist
+print("Today's Top 50 Hits Songs")
 print("-------------------------")
 count = 0
 for item in playlist["tracks"]["items"]:
