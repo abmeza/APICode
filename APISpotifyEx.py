@@ -27,15 +27,25 @@ playlist_res = requests.get(BASE_url + 'playlists/' + playlist_id,
 playlist = playlist_res.json()
 print(playlist["id"])
 
-# Print out information about the playlist
+# Store and print out desired information 
+# about the playlist that was selected
 print("Today's Top 50 Hits Songs")
 print("-------------------------")
+todayTopSongs = {}
 count = 0
 for item in playlist["tracks"]["items"]:
     track = item["track"]
     if track is not None:
-        print(count, "|",
-            track["album"]["name"], "|",
-            "Time Added:", item["added_at"], "|",
-            "Popularity Rank:", track["popularity"])
+        #get all artists names
+        artist_names = []
+        for artist in track["artists"]:
+            artist_names.append(artist["name"])
+        
+        print(count, ":" ,track["album"]["name"],)
+        print("     by:", artist_names)
+        print("     Popularity:", track["popularity"])
+        todayTopSongs[count] = {"Name": track["album"]["name"],
+                                "Artists": artist_names,
+                                "Popularity": track["popularity"]}
     count += 1
+print(todayTopSongs)
