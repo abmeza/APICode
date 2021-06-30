@@ -24,7 +24,7 @@ headers = {
     'Authorization': 'Bearer {token}'.format(token=access_token)
 }
 playlist_res = requests.get(BASE_url + 'playlists/' + playlist_id, 
-                            headers = headers )
+                            headers = headers)
 playlist = playlist_res.json()
 
 # Print out information about the playlist
