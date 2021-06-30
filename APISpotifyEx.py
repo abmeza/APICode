@@ -1,6 +1,5 @@
 import requests
 import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials
 
 # Important constant values
 CLIENT_id = "2b1a105e0bf94d69924ed5789171693f"
@@ -23,15 +22,22 @@ playlist_id = '37i9dQZF1DXcBWIGoYBM5M'  # Todays top hits 50
 headers = {
     'Authorization': 'Bearer {token}'.format(token=access_token)
 }
-playlist_res = requests.get(BASE_url + 'playlists/' + playlist_id, 
+playlist_res = requests.get(BASE_url + 'playlists/' + playlist_id,
     headers = headers)
 playlist = playlist_res.json()
+print(playlist["id"])
 
-# Print out information about the playlist
+
+
+# PRINT OUT information about the playlist
 print("10 songs on the top hits:")
 print("-------------------------")
 count = 0
-for track in playlist["tracks"]["items"]:
-    if track["track"] is not None:
-        print(count, ":", track["track"]["album"]["name"])
+for item in playlist["tracks"]["items"]:
+    track = item["track"]
+    if track is not None:
+        print(count, "|",
+            track["album"]["name"], "|",
+            "Time Added:", item["added_at"], "|",
+            "Popularity Rank:", track["popularity"])
     count += 1
