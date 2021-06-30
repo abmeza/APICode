@@ -23,8 +23,8 @@ playlist_id = '37i9dQZF1DXcBWIGoYBM5M'  # Todays top hits 50
 headers = {
     'Authorization': 'Bearer {token}'.format(token=access_token)
 }
-playlist_res = requests.get(BASE_url + 'playlists/' + playlist_id,
-                            headers = headers)
+playlist_res = requests.get(BASE_url + 'playlists/' + playlist_id, 
+    headers = headers)
 playlist = playlist_res.json()
 
 # Print out information about the playlist
