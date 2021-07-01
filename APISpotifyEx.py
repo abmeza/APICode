@@ -3,6 +3,7 @@ import spotipy
 import pandas as pd
 from sqlalchemy import create_engine
 
+
 # Program returns access token requiered for get requests when connecting
 # to the spotify API. This is based on the given cliend id and
 # secret id that the client has.
@@ -28,7 +29,7 @@ def get_access_token(cid, sid):
 
 
 # Program returns gets json() of playlist requested based on
-# given playlist ID. Access token required by spotify to make 
+# given playlist ID. Access token required by spotify to make
 # get requests.
 # @para            pid: str value Playlist ID
 # @para   access_token: str value access token  
@@ -44,7 +45,7 @@ def get_playlist(pid, access_token):
     }
     response = requests.get(BASE_url + pid, headers=headers)
 
-    #Update playlist if successful get request
+    # Update playlist if successful get request
     if (response.status_code == 200):
         playlist = response.json()
 
@@ -57,7 +58,7 @@ def get_playlist(pid, access_token):
 # @para playlist: json() information of playlist
 # @return playlist_df: pd.DataFrame of desired information from playlist
 def parse_playlist_to_dataframe(playlist):
-    playlist_df = pd.DataFrame()  # return value
+    playlist_df = pd.DataFrame()   #return value
     playlist_dict = {}
     count = 0 # track order of songs in playlist
 
@@ -77,7 +78,6 @@ def parse_playlist_to_dataframe(playlist):
                                     "Popularity": track["popularity"],
                                     "Artists": artist_names[0]}
         count += 1
-
     playlist_df = pd.DataFrame.from_dict(playlist_dict, 
                                          orient = "index",
                                          columns=['Name', 
@@ -120,7 +120,7 @@ def main():
     # Collect Items for Authentication
     CLIENT_id = "2b1a105e0bf94d69924ed5789171693f"
     SECRET_id = "487346bb76a54e05b308947a10a96ebe"
-    access_token = get_access_token(CLIENT_id,SECRET_id) 
+    access_token = get_access_token(CLIENT_id, SECRET_id)
     print(access_token)
 
     # Get playlist from spotify
