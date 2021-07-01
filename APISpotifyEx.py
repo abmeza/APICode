@@ -6,10 +6,8 @@ from sqlalchemy import create_engine
 # Program returns access token requiered for get requests when connecting
 # to the spotify API. This is based on the given cliend id and
 # secret id that the client has.
-# 
 # @para   cid: str value Client ID
 # @para   sid: str value Secret ID  
-# 
 # @return token: str val of access token
 #                None    if unsuccessful
 def get_access_token(cid, sid):
@@ -31,10 +29,8 @@ def get_access_token(cid, sid):
 # Program returns gets json() of playlist requested based on
 # given playlist ID. Access token required by spotify to make 
 # get requests.
-# 
 # @para            pid: str value Playlist ID
 # @para   access_token: str value access token  
-# 
 # @return playlist: json() information of playlist
 #                   None   if error
 def get_playlist(pid, access_token):
@@ -52,36 +48,34 @@ def get_playlist(pid, access_token):
         playlist = response.json()
 
     return playlist
-  
+
 # Parses through given json playlist, grabs desired infromation,
 # which can be changed as desired. This is then turned into a 
 # data frame and returned
-# 
 # @para playlist: json() information of playlist
-# 
 # @return playlist_df: pd.DataFrame of desired information from playlist
 def parse_playlist_to_dataframe(playlist):
     playlist_df = pd.DataFrame() # return value
     playlist_dict = {}
     count = 0 # track order of songs in playlist
-  
+
     # Loop through playlist items
     for item in playlist["tracks"]["items"]:
         track = item["track"]
-        
+
         # Make sure item is track before parsing
         if track is not None:
             #Parse artists to make list of names
             artist_names = []
             for artist in track["artists"]:
                 artist_names.append(artist["name"])
-                
+
             playlist_dict[count] = {"Name": track["album"]["name"],
                                   "Add Date": item["added_at"],
                                   "Popularity": track["popularity"],
                                   "Artists": artist_names[0]}
         count += 1
-        
+
     playlist_df = pd.DataFrame.from_dict(playlist_dict, 
                                          orient = "index",
                                          columns=['Name', 
@@ -93,21 +87,19 @@ def parse_playlist_to_dataframe(playlist):
 # DEBUGGING HELPFUL
 # Takes playlist json(), and prints out information in nice format.
 # Information that is printed can be changed as desired. 
-# 
 # @para playlist: json() information of playlist
-# 
 # @return None 
 def print_playlist_json_info(playlist):
     print("Today's Top 50 Hits Songs")
     print("-------------------------")
-    
+
     count = 0
     for item in playlist["tracks"]["items"]:
         track = item["track"]
-        
+
         # Avoid error if call to radio in playlist
         if track is not None:
-            
+
             # Get all artists names in list
             artist_names = []
             for artist in track["artists"]:
@@ -126,7 +118,7 @@ def main():
     SECRET_id = "487346bb76a54e05b308947a10a96ebe"
     access_token = get_access_token(CLIENT_id,SECRET_id) 
     print (access_token)
-    
+
     # Get playlist from spotify
     playlist_id = '37i9dQZF1DXcBWIGoYBM5M' # Todays top hits 50
     playlist = get_playlist(playlist_id, access_token)
