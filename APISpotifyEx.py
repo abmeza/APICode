@@ -89,9 +89,9 @@ def parse_playlist_to_dataframe(playlist):
 
 # DEBUGGING HELPFUL
 # Takes playlist json(), and prints out information in nice format.
-# Information that is printed can be changed as desired. 
+# Information that is printed can be changed as desired.
 # @para playlist: json() information of playlist
-# @return None 
+# @return None
 def print_playlist_json_info(playlist):
     print("Today's Top 50 Hits Songs")
     print("-------------------------")

@@ -31,7 +31,7 @@ class TestFileName(unittest.TestCase):
         myCID = '2b1a105e0bf94d69924ed5789171693f'
         mySID = '487346bb76a54e05b308947a10a96ebe'
         access_token = get_access_token(myCID, mySID)
-        
+
         # Constants
         playlist = None
         myPID = '37i9dQZF1DXcBWIGoYBM5M' 
@@ -41,7 +41,7 @@ class TestFileName(unittest.TestCase):
         self.assertEqual(get_playlist('', ''), None)
         self.assertEqual(get_playlist(myPID, ''), None)
         self.assertEqual(get_playlist('', access_token), None)
-        
+
         # TEST Random string
         self.assertEqual(get_playlist('raq4tctcfheagvsa', 'rh4y5yh4eu63uu'),
                          None)
