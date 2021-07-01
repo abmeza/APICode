@@ -32,7 +32,7 @@ def get_access_token(cid, sid):
 # given playlist ID. Access token required by spotify to make
 # get requests.
 # @para            pid: str value Playlist ID
-# @para   access_token: str value access token  
+# @para   access_token: str value access token
 # @return playlist: json() information of playlist
 #                   None   if error
 def get_playlist(pid, access_token):
@@ -58,9 +58,9 @@ def get_playlist(pid, access_token):
 # @para playlist: json() information of playlist
 # @return playlist_df: pd.DataFrame of desired information from playlist
 def parse_playlist_to_dataframe(playlist):
-    playlist_df = pd.DataFrame()   #return value
+    playlist_df = pd.DataFrame()   # return value
     playlist_dict = {}
-    count = 0 # track order of songs in playlist
+    count = 0   # track order of songs in playlist
 
     # Loop through playlist items
     for item in playlist["tracks"]["items"]:
@@ -68,7 +68,7 @@ def parse_playlist_to_dataframe(playlist):
 
         # Make sure item is track before parsing
         if track is not None:
-            #Parse artists to make list of names
+            # Parse artists to make list of names
             artist_names = []
             for artist in track["artists"]:
                 artist_names.append(artist["name"])
@@ -78,7 +78,7 @@ def parse_playlist_to_dataframe(playlist):
                                     "Popularity": track["popularity"],
                                     "Artists": artist_names[0]}
         count += 1
-    playlist_df = pd.DataFrame.from_dict(playlist_dict, 
+    playlist_df = pd.DataFrame.from_dict(playlist_dict,
                                          orient = "index",
                                          columns=['Name', 
                                                   'Artists',
@@ -121,7 +121,6 @@ def main():
     CLIENT_id = "2b1a105e0bf94d69924ed5789171693f"
     SECRET_id = "487346bb76a54e05b308947a10a96ebe"
     access_token = get_access_token(CLIENT_id, SECRET_id)
-    print(access_token)
 
     # Get playlist from spotify
     playlist_id = '37i9dQZF1DXcBWIGoYBM5M' # Todays top hits 50
@@ -129,9 +128,8 @@ def main():
 
     # Create Dataframe from json file
     todayTopHitsdf = parse_playlist_to_dataframe(playlist)
-    # print(todayTopHitsdf.head())
 
-    #Create Database with given information
+    # Create Database with given information
     engine = create_engine('mysql://root:codio@localhost/spotify_music')
     todayTopHitsdf.to_sql('today_top_hits', con=engine,
                           if_exists='replace', index=True)
