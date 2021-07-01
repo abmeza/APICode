@@ -1,5 +1,8 @@
 import requests
 import spotipy
+import pandas as pd
+from sqlalchemy import create_engine
+
 
 # Important constant values
 CLIENT_id = "2b1a105e0bf94d69924ed5789171693f"
@@ -31,21 +34,41 @@ print(playlist["id"])
 # about the playlist that was selected
 print("Today's Top 50 Hits Songs")
 print("-------------------------")
-todayTopSongs = {}
+todayTopHits = {}
+mostArtists = 0 #Constant with song that has most aritists
 count = 0
 for item in playlist["tracks"]["items"]:
     track = item["track"]
+    
     if track is not None:
         #get all artists names
         artist_names = []
         for artist in track["artists"]:
             artist_names.append(artist["name"])
         
-        print(count, ":" ,track["album"]["name"],)
-        print("     by:", artist_names)
-        print("     Popularity:", track["popularity"])
-        todayTopSongs[count] = {"Name": track["album"]["name"],
-                                "Artists": artist_names,
-                                "Popularity": track["popularity"]}
+        todayTopHits[count] = {"Name": track["album"]["name"],
+                              "Add Date": item["added_at"],
+                              "Popularity": track["popularity"],
+                              "Artists": artist_names[0]}
+        
+        #print(count, ":" ,track["album"]["name"],)
+        #print("     by:", artist_names)
+        #print("     Add Date:", item["added_at"])
+        #print("     Popularity:", track["popularity"])
+        
+        
     count += 1
-print(todayTopSongs)
+
+#Create Dataframe From Dictionary
+todayTopHitsdf = pd.DataFrame.from_dict(todayTopHits,
+                                        orient = "index",
+                                        columns=['Name', 
+                                                 'Artists',
+                                                 'Add Date',
+                                                 'Popularity'])
+print(todayTopHitsdf.head())
+
+#Creating an Engine
+engine = create_engine('mysql://root:codio@localhost/spotify_music')
+todayTopHitsdf.to_sql('today_top_hits', con=engine,
+                      if_exists='replace', index=True)
