@@ -63,7 +63,26 @@ def get_playlist(pid, access_token):
 #                        empty if error
 def parse_playlist_to_dict(playlist):
     playlist_dict = {}
-  
+    mostArtists = 0 # Constant with song that has most aritists
+    count = 0       #track order of songs in playlist
+    
+    # Loop through playlist items
+    for item in playlist["tracks"]["items"]:
+        track = item["track"]
+        
+        # Make sure item is track before parsing
+        if track is not None:
+            #Get 
+            artist_names = []
+            for artist in track["artists"]:
+                artist_names.append(artist["name"])
+                
+            playlist_dict[count] = {"Name": track["album"]["name"],
+                                  "Add Date": item["added_at"],
+                                  "Popularity": track["popularity"],
+                                  "Artists": artist_names[0]}
+        count += 1
+        
   
     return playlist_dict
   
@@ -111,26 +130,8 @@ def main():
     # print entire playlist using json file
     #print_playlist_json_info(playlist)
     
-    # Store and print out desired information 
-    # about the playlist that was selected
-    
-    todayTopHits = {}
-    mostArtists = 0 # Constant with song that has most aritists
-    count = 0
-    for item in playlist["tracks"]["items"]:
-        track = item["track"]
-        if track is not None:
-            artist_names = []
-            for artist in track["artists"]:
-                artist_names.append(artist["name"])
-            todayTopHits[count] = {"Name": track["album"]["name"],
-                                  "Add Date": item["added_at"],
-                                  "Popularity": track["popularity"],
-                                  "Artists": artist_names[0]}
-        count += 1
-        
     #Store desired information from json playlist into dict
-    # todayTopHits = parse_playlist_to_dict(playlist)
+    todayTopHits = parse_playlist_to_dict(playlist)
     
     
     # Create Dataframe From Dictionary
