@@ -11,7 +11,7 @@ from sqlalchemy import create_engine
 # @para   sid: str value Secret ID  
 # 
 # @return token: str val of access token
-#                None    if error
+#                None    if unsuccessful
 def get_access_token(cid, sid):
     token = None
     AUTH_URL = 'https://accounts.spotify.com/api/token'
@@ -26,7 +26,6 @@ def get_access_token(cid, sid):
     #Update token if success
     if (response.status_code == 200):
         token = response.json()['access_token']
-
     return token
 
 # Program returns gets json() of playlist requested based on
@@ -126,17 +125,15 @@ def main():
     CLIENT_id = "2b1a105e0bf94d69924ed5789171693f"
     SECRET_id = "487346bb76a54e05b308947a10a96ebe"
     access_token = get_access_token(CLIENT_id,SECRET_id) 
-
+    print (access_token)
+    
     # Get playlist from spotify
     playlist_id = '37i9dQZF1DXcBWIGoYBM5M' # Todays top hits 50
     playlist = get_playlist(playlist_id, access_token)
 
-    # print entire playlist using json file
-    #print_playlist_json_info(playlist)
-
     # Create Dataframe from json file
     todayTopHitsdf = parse_playlist_to_dataframe(playlist);
-    print(todayTopHitsdf.head())
+    # print(todayTopHitsdf.head())
 
     #Create Database with given information
     engine = create_engine('mysql://root:codio@localhost/spotify_music')
