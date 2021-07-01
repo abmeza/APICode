@@ -6,10 +6,10 @@ from APISpotifyEx import (get_access_token,
 
 class TestFileName(unittest.TestCase):
     def test_get_access_token(self):
-        #Constants
+        # Constants
         myCID = '2b1a105e0bf94d69924ed5789171693f'
         mySID = '487346bb76a54e05b308947a10a96ebe'
-        
+
         #TEST Empty string 
         self.assertEqual(get_access_token('', ''), None)
         self.assertEqual(get_access_token(myCID, ''), None)
@@ -30,7 +30,7 @@ class TestFileName(unittest.TestCase):
         #Get valid access token for tests
         myCID = '2b1a105e0bf94d69924ed5789171693f'
         mySID = '487346bb76a54e05b308947a10a96ebe'
-        access_token = get_access_token(myCID,mySID)
+        access_token = get_access_token(myCID, mySID)
         
         #Constants
         playlist = None
@@ -53,7 +53,7 @@ class TestFileName(unittest.TestCase):
         #TEST Success 1
         playlist = get_playlist(myPID, access_token)
         self.assertIs(type(playlist), dict,
-                     msg="Json() value should be returned which is dict")
+                      msg="Json() value should be returned which is dict")
         self.assertNotEqual(playlist["id"], None,
                             msg="Playlist should have id parameter")
         self.assertEqual(playlist["id"],myPID,

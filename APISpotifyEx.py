@@ -53,7 +53,7 @@ def get_playlist(pid, access_token):
 
 
 # Parses through given json playlist, grabs desired infromation,
-# which can be changed as desired. This is then turned into a 
+# which can be changed as desired. This is then turned into a
 # data frame and returned
 # @para playlist: json() information of playlist
 # @return playlist_df: pd.DataFrame of desired information from playlist
@@ -79,7 +79,7 @@ def parse_playlist_to_dataframe(playlist):
                                     "Artists": artist_names[0]}
         count += 1
     playlist_df = pd.DataFrame.from_dict(playlist_dict,
-                                         orient = "index",
+                                         orient="index",
                                          columns=['Name', 
                                                   'Artists',
                                                   'Add Date',
@@ -123,7 +123,7 @@ def main():
     access_token = get_access_token(CLIENT_id, SECRET_id)
 
     # Get playlist from spotify
-    playlist_id = '37i9dQZF1DXcBWIGoYBM5M' # Todays top hits 50
+    playlist_id = '37i9dQZF1DXcBWIGoYBM5M'   # Todays top hits 50
     playlist = get_playlist(playlist_id, access_token)
 
     # Create Dataframe from json file
