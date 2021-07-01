@@ -53,26 +53,26 @@ def get_playlist(pid, access_token):
         playlist = response.json()
 
     return playlist
-
-# Parses through given json playlist and grabs desired infromation,
-# which can be changed as desired.
+  
+# Parses through given json playlist, grabs desired infromation,
+# which can be changed as desired. This is then turned into a 
+# data frame and returned
 # 
 # @para playlist: json() information of playlist
 # 
-# @return playlist_dict: dict of desired information from playlist
-#                        empty if error
-def parse_playlist_to_dict(playlist):
+# @return playlist_df: pd.DataFrame of desired information from playlist
+def parse_playlist_to_dataframe(playlist):
+    playlist_df = pd.DataFrame() # return value
     playlist_dict = {}
-    mostArtists = 0 # Constant with song that has most aritists
-    count = 0       #track order of songs in playlist
-    
+    count = 0 # track order of songs in playlist
+  
     # Loop through playlist items
     for item in playlist["tracks"]["items"]:
         track = item["track"]
         
         # Make sure item is track before parsing
         if track is not None:
-            #Get 
+            #Parse artists to make list of names
             artist_names = []
             for artist in track["artists"]:
                 artist_names.append(artist["name"])
@@ -83,8 +83,13 @@ def parse_playlist_to_dict(playlist):
                                   "Artists": artist_names[0]}
         count += 1
         
-  
-    return playlist_dict
+    playlist_df = pd.DataFrame.from_dict(playlist_dict, 
+                                         orient = "index",
+                                         columns=['Name', 
+                                                  'Artists',
+                                                  'Add Date',
+                                                  'Popularity'])
+    return playlist_df
   
 # DEBUGGING HELPFUL
 # Takes playlist json(), and prints out information in nice format.
@@ -126,24 +131,14 @@ def main():
     playlist_id = '37i9dQZF1DXcBWIGoYBM5M' # Todays top hits 50
     playlist = get_playlist(playlist_id, access_token)
 
-    
     # print entire playlist using json file
     #print_playlist_json_info(playlist)
-    
-    #Store desired information from json playlist into dict
-    todayTopHits = parse_playlist_to_dict(playlist)
-    
-    
-    # Create Dataframe From Dictionary
-    todayTopHitsdf = pd.DataFrame.from_dict(todayTopHits,
-                                            orient = "index",
-                                            columns=['Name', 
-                                                     'Artists',
-                                                     'Add Date',
-                                                     'Popularity'])
+
+    # Create Dataframe from json file
+    todayTopHitsdf = parse_playlist_to_dataframe(playlist);
     print(todayTopHitsdf.head())
-    
-    #Creating an Engine
+
+    #Create Database with given information
     engine = create_engine('mysql://root:codio@localhost/spotify_music')
     todayTopHitsdf.to_sql('today_top_hits', con=engine,
                           if_exists='replace', index=True)
