@@ -80,7 +80,7 @@ def parse_playlist_to_dataframe(playlist):
         count += 1
     playlist_df = pd.DataFrame.from_dict(playlist_dict,
                                          orient="index",
-                                         columns=['Name', 
+                                         columns=['Name',
                                                   'Artists',
                                                   'Add Date',
                                                   'Popularity'])
