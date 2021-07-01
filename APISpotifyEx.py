@@ -7,7 +7,7 @@ from sqlalchemy import create_engine
 # to the spotify API. This is based on the given cliend id and
 # secret id that the client has.
 # @para   cid: str value Client ID
-# @para   sid: str value Secret ID  
+# @para   sid: str value Secret ID
 # @return token: str val of access token
 #                None    if unsuccessful
 def get_access_token(cid, sid):
@@ -21,10 +21,11 @@ def get_access_token(cid, sid):
         'client_secret': sid,
     })
 
-    #Update token if success
+    # Update token if success
     if (response.status_code == 200):
         token = response.json()['access_token']
     return token
+
 
 # Program returns gets json() of playlist requested based on
 # given playlist ID. Access token required by spotify to make 
@@ -41,7 +42,7 @@ def get_playlist(pid, access_token):
     headers = {
         'Authorization': 'Bearer {token}'.format(token=access_token)
     }
-    response = requests.get(BASE_url + pid, headers = headers)
+    response = requests.get(BASE_url + pid, headers=headers)
 
     #Update playlist if successful get request
     if (response.status_code == 200):
@@ -49,13 +50,14 @@ def get_playlist(pid, access_token):
 
     return playlist
 
+
 # Parses through given json playlist, grabs desired infromation,
 # which can be changed as desired. This is then turned into a 
 # data frame and returned
 # @para playlist: json() information of playlist
 # @return playlist_df: pd.DataFrame of desired information from playlist
 def parse_playlist_to_dataframe(playlist):
-    playlist_df = pd.DataFrame() # return value
+    playlist_df = pd.DataFrame()  # return value
     playlist_dict = {}
     count = 0 # track order of songs in playlist
 
@@ -71,9 +73,9 @@ def parse_playlist_to_dataframe(playlist):
                 artist_names.append(artist["name"])
 
             playlist_dict[count] = {"Name": track["album"]["name"],
-                                  "Add Date": item["added_at"],
-                                  "Popularity": track["popularity"],
-                                  "Artists": artist_names[0]}
+                                    "Add Date": item["added_at"],
+                                    "Popularity": track["popularity"],
+                                    "Artists": artist_names[0]}
         count += 1
 
     playlist_df = pd.DataFrame.from_dict(playlist_dict, 
@@ -83,7 +85,8 @@ def parse_playlist_to_dataframe(playlist):
                                                   'Add Date',
                                                   'Popularity'])
     return playlist_df
-  
+
+
 # DEBUGGING HELPFUL
 # Takes playlist json(), and prints out information in nice format.
 # Information that is printed can be changed as desired. 
@@ -105,32 +108,34 @@ def print_playlist_json_info(playlist):
             for artist in track["artists"]:
                 artist_names.append(artist["name"])
 
-            print(count, ":" ,track["album"]["name"],)
+            print(count, ":", track["album"]["name"],)
             print("     by:", artist_names)
             print("     Add Date:", item["added_at"])
             print("     Popularity:", track["popularity"])
         count += 1
     return
 
+
 def main():
     # Collect Items for Authentication
     CLIENT_id = "2b1a105e0bf94d69924ed5789171693f"
     SECRET_id = "487346bb76a54e05b308947a10a96ebe"
     access_token = get_access_token(CLIENT_id,SECRET_id) 
-    print (access_token)
+    print(access_token)
 
     # Get playlist from spotify
     playlist_id = '37i9dQZF1DXcBWIGoYBM5M' # Todays top hits 50
     playlist = get_playlist(playlist_id, access_token)
 
     # Create Dataframe from json file
-    todayTopHitsdf = parse_playlist_to_dataframe(playlist);
+    todayTopHitsdf = parse_playlist_to_dataframe(playlist)
     # print(todayTopHitsdf.head())
 
     #Create Database with given information
     engine = create_engine('mysql://root:codio@localhost/spotify_music')
     todayTopHitsdf.to_sql('today_top_hits', con=engine,
                           if_exists='replace', index=True)
+
 
 if __name__ == '__main__':
     main()

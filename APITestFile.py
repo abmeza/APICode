@@ -1,7 +1,6 @@
 import unittest
 from APISpotifyEx import get_access_token, get_playlist
 
-
 class TestFileName(unittest.TestCase):
     def test_get_access_token(self):
         myCID = '2b1a105e0bf94d69924ed5789171693f'
@@ -47,11 +46,7 @@ class TestFileName(unittest.TestCase):
         
         #Success Test Length
         # self.assertEqual()
-        
 
-    #def test_function2(self):
-    #    self.assertEqual(function2(2,1), 3)
-    #    self.assertEqual(function2(2.1, 1.2), 3.3)
 
 if __name__ == '__main__':
     unittest.main()
