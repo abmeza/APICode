@@ -39,7 +39,63 @@ def get_access_token(cid, sid):
 # @return playlist: json() information of playlist
 #                   None   if error
 def get_playlist(pid, access_token):
-    return None;
+    playlist = None
+    BASE_url = 'https://api.spotify.com/v1/playlists/'
+
+    # Get request for playlist
+    headers = {
+        'Authorization': 'Bearer {token}'.format(token=access_token)
+    }
+    response = requests.get(BASE_url + pid, headers = headers)
+
+    #Update playlist if successful get request
+    if (response.status_code == 200):
+        playlist = response.json()
+
+    return playlist
+
+# Parses through given json playlist and grabs desired infromation,
+# which can be changed as desired.
+# 
+# @para playlist: json() information of playlist
+# 
+# @return playlist_dict: dict of desired information from playlist
+#                        empty if error
+def parse_playlist_to_dict(playlist):
+    playlist_dict = {}
+  
+  
+    return playlist_dict
+  
+# DEBUGGING HELPFUL
+# Takes playlist json(), and prints out information in nice format.
+# Information that is printed can be changed as desired. 
+# 
+# @para playlist: json() information of playlist
+# 
+# @return None 
+def print_playlist_json_info(playlist):
+    print("Today's Top 50 Hits Songs")
+    print("-------------------------")
+    
+    count = 0
+    for item in playlist["tracks"]["items"]:
+        track = item["track"]
+        
+        # Avoid error if call to radio in playlist
+        if track is not None:
+            
+            # Get all artists names in list
+            artist_names = []
+            for artist in track["artists"]:
+                artist_names.append(artist["name"])
+
+            print(count, ":" ,track["album"]["name"],)
+            print("     by:", artist_names)
+            print("     Add Date:", item["added_at"])
+            print("     Popularity:", track["popularity"])
+        count += 1
+    return
 
 def main():
     # Collect Items for Authentication
@@ -47,46 +103,36 @@ def main():
     SECRET_id = "487346bb76a54e05b308947a10a96ebe"
     access_token = get_access_token(CLIENT_id,SECRET_id) 
 
-    # Get an album from spotify
-    BASE_url = 'https://api.spotify.com/v1/'
-    playlist_id = '37i9dQZF1DXcBWIGoYBM5M'  # Todays top hits 50
+    # Get playlist from spotify
+    playlist_id = '37i9dQZF1DXcBWIGoYBM5M' # Todays top hits 50
+    playlist = get_playlist(playlist_id, access_token)
 
-    # Get Playlist
-    headers = {
-        'Authorization': 'Bearer {token}'.format(token=access_token)
-    }
-    playlist_res = requests.get(BASE_url + 'playlists/' + playlist_id,
-                                headers = headers)
-    playlist = playlist_res.json()
-    print(playlist["id"])
-
+    
+    # print entire playlist using json file
+    #print_playlist_json_info(playlist)
+    
     # Store and print out desired information 
     # about the playlist that was selected
-    print("Today's Top 50 Hits Songs")
-    print("-------------------------")
+    
     todayTopHits = {}
     mostArtists = 0 # Constant with song that has most aritists
     count = 0
     for item in playlist["tracks"]["items"]:
         track = item["track"]
-
         if track is not None:
-            #get all artists names
             artist_names = []
             for artist in track["artists"]:
                 artist_names.append(artist["name"])
-
             todayTopHits[count] = {"Name": track["album"]["name"],
                                   "Add Date": item["added_at"],
                                   "Popularity": track["popularity"],
                                   "Artists": artist_names[0]}
-
-            # print(count, ":" ,track["album"]["name"],)
-            # print("     by:", artist_names)
-            # print("     Add Date:", item["added_at"])
-            # print("     Popularity:", track["popularity"])
         count += 1
-
+        
+    #Store desired information from json playlist into dict
+    # todayTopHits = parse_playlist_to_dict(playlist)
+    
+    
     # Create Dataframe From Dictionary
     todayTopHitsdf = pd.DataFrame.from_dict(todayTopHits,
                                             orient = "index",
