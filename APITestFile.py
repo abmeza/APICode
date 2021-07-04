@@ -11,7 +11,7 @@ class TestFileName(unittest.TestCase):
         myCID = '2b1a105e0bf94d69924ed5789171693f'
         mySID = '487346bb76a54e05b308947a10a96ebe'
 
-        # TEST Empty string 
+        # TEST Empty string
         self.assertEqual(get_access_token('', ''), None)
         self.assertEqual(get_access_token(myCID, ''), None)
         self.assertEqual(get_access_token('', mySID), None)

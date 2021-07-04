@@ -92,20 +92,22 @@ def create_database_table(dataframe, database, table):
 # @para fileName: string name of file
 # @return: None
 def save_database_in_file(database, fileName):
-    os.system("mysqldump -u root -pcodio" database " > " + fileName + ".sql")
+    os.system("mysqldump -u root -pcodio" + database +
+              " > " + fileName + ".sql")
 
 
 # @para database: string name of database
 # @para fileName: string name of file
 # @return: None
-def load_database_from_file(database, fileName)
-    os.system("mysql -u root -pcodio " + database + " < " + fileName + ".sql")
+def load_database_from_file(database, fileName):
+    os.system("mysql -u root -pcodio " + database +
+              " < " + fileName + ".sql")
   
 
 # @para database: string name of database
 # @para    table: string name of table
 # @return: None
-#  def update_database_table(database, table, )
+# def update_database_table(database, table, )
   
   
 def main():
