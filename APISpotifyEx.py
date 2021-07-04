@@ -57,11 +57,16 @@ def get_playlist(pid, access_token):
 # data frame and returned
 # @para playlist: json() information of playlist
 # @return playlist_df: pd.DataFrame of desired information from playlist
+#                      empty 
 def parse_playlist_to_dataframe(playlist):
     playlist_df = pd.DataFrame()   # return value
     playlist_dict = {}
     count = 0   # track order of songs in playlist
-
+    
+    # Return empty playlist is empty
+    if playlist == None:
+        return playlist_df
+    
     # Loop through playlist items
     for item in playlist["tracks"]["items"]:
         track = item["track"]

@@ -1,4 +1,5 @@
 import unittest
+import pandas as pd
 from APISpotifyEx import (get_access_token, 
                           get_playlist, 
                           parse_playlist_to_dataframe)
@@ -69,7 +70,22 @@ class TestFileName(unittest.TestCase):
                          msg="Playlist should have correct PID")
 
     def test_parse_playlist_to_dataframe(self):
+        # Get valid playlist
+        myCID = '2b1a105e0bf94d69924ed5789171693f'
+        mySID = '487346bb76a54e05b308947a10a96ebe'
+        access_token = get_access_token(myCID, mySID)
         myPID = '37i9dQZF1DXcBWIGoYBM5M' 
+        playlist = get_playlist(myPID, access_token)
+        output = None
+
+        # TEST Empty input
+        self.assertTrue(
+          parse_playlist_to_dataframe(None).empty
+        )
+
+        # TEST Success 1
+        output = parse_playlist_to_dataframe(playlist)
+        self.assertIs(type(output), type(pd.DataFrame()))
 
 
 if __name__ == '__main__':
