@@ -14,7 +14,8 @@ jobs:
 
       - name: Install tools
         run: python -m pip install --upgrade pip pytest
+        run: python -m pip install --upgrade pip pandas
 
       - name: Test with unittest
         run: |
-          python3 -m unittest APITestFile.py pandas
+          python3 -m unittest APITestFile.py
