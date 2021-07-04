@@ -1,7 +1,7 @@
 import unittest
 import pandas as pd
-from APISpotifyEx import (get_access_token, 
-                          get_playlist, 
+from APISpotifyEx import (get_access_token,
+                          get_playlist,
                           parse_playlist_to_dataframe)
 
 
