@@ -17,4 +17,4 @@ jobs:
 
       - name: Test with unittest
         run: |
-          python3 -m unittest APITestFile.py
+          python3 -m unittest APITestFile.py pandas
