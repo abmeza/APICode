@@ -19,9 +19,9 @@ class TestFileName(unittest.TestCase):
         # TEST Random string
         self.assertEqual(get_access_token('adsgfasf', 'rh4y5yh4eu63uu'),
                          None)
-        self.assertEqual(get_access_token(myCID, '4hjb231yr3yb25'), 
+        self.assertEqual(get_access_token(myCID, '4hjb231yr3yb25'),
                          None)
-        self.assertEqual(get_access_token('43qtqxdgfcfq3', mySID), 
+        self.assertEqual(get_access_token('43qtqxdgfcfq3', mySID),
                          None)
 
         # TEST Success Check Length
@@ -46,9 +46,9 @@ class TestFileName(unittest.TestCase):
         # TEST Random string
         self.assertEqual(get_playlist('raq4tctcfheagvsa', 'rh4y5yh4eu63uu'),
                          None)
-        self.assertEqual(get_playlist(myOtherPID, '4hjb231yr3yb25'), 
+        self.assertEqual(get_playlist(myOtherPID, '4hjb231yr3yb25'),
                          None)
-        self.assertEqual(get_playlist('43qtqxdgfcfq3', access_token), 
+        self.assertEqual(get_playlist('43qtqxdgfcfq3', access_token),
                          None)
 
         # TEST Success 1
@@ -74,7 +74,7 @@ class TestFileName(unittest.TestCase):
         myCID = '2b1a105e0bf94d69924ed5789171693f'
         mySID = '487346bb76a54e05b308947a10a96ebe'
         access_token = get_access_token(myCID, mySID)
-        myPID = '37i9dQZF1DXcBWIGoYBM5M' 
+        myPID = '37i9dQZF1DXcBWIGoYBM5M'
         playlist = get_playlist(myPID, access_token)
         output = None
 
