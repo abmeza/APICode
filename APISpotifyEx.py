@@ -122,13 +122,13 @@ def dataframe_from_table(database, table):
 # @para database: string name of database
 # @para    table: string name of table
 # @return: None
-def update_database_table(database, table)
+# def update_database_table(database, table):
     
 
 # Handle user input to make interface of database manipulation understandable
 # @para h: string dicating what string to print
 # @return answer: int for response
-def user_input(h)
+def user_input(h):
     if (h == "menu"):
         print("Welcome! Do you wish to: \n" +
                        "   (1) - Update 'Today's Top Hits' database \n" +
@@ -140,20 +140,26 @@ def user_input(h)
     answer = input()
     return answer
 
-# Handle user inputs to get song based on rank on "Todays Top Chartrs"
-# @para:
+# Handles inspection info of songs in database, and stores in search history 
+# database as reference
+# @para: none
 # @return: when finished
-def view_songs()
-    num = 0
-    while (num != ""):
-        num = input("Choose what track to see based on ranking:")
+def view_songs():
+    num = 100
+    df = dataframe_from_table('spotify_music','today_top_hits')
+    history = dataframe_from_table('spotify_music','search_history')
+    print("Select song to view based on rank from 1-50, or \n"
+          "input 0 to quit current prompt")
+    while (num != 0):
+        num = int(input("Choose what track to see based on ranking:"))
         if (1 <= num and num <= 50):
-            print_song_info(num)
-            
-        else if (num == ""):
+            print(df.iloc[[num-1]])
+            history = pd.concat([df.iloc[[num-1]],history])
+        elif (num == 0):
             print("Quitting loop")
         else:
-            print("Invlaid input")
+            print("Invalid input")     
+    create_database_table(history, 'spotify_music', 'search_history')
 
 
 def main():
@@ -170,30 +176,28 @@ def main():
     #User Input to manipulate database
     help_level = "menu"
     answer = user_input(help_level)
-    
     while (answer is not 0):
         # Exit loop
-        if (answer == 0):
+        if (answer == '0'):
             save_database_in_file('spotify_music','spotifyMusicFile')
             break
 
         # Update 'today_top_hits' playlist table        
-        else if (answer == 1):
-            create_database_table(todayTopHitsdf,'spotify_music','today_top_hits')
+        elif (answer == '1'):
+            create_database_table(todayTopHitsdf,
+                                  'spotify_music','today_top_hits')
             save_database_in_file('spotify_music','spotifyMusicFile')
             print("Updated the file!")
 
         # Get song info           
-        else if (answer == 2):
-            print("Select song to view based on rank from 1-50, or click \n"
-                  "and input nothing to quit current prompt")
-            veiw_songs()
+        elif (answer == '2'):
+            view_songs()
 
         #Look at search history
-        else if (answer == 3):
+        elif (answer == '3'):
             print("Here is search history of last 5 songs")
             print(dataframe_from_table('spotify_music', 
-                                       'searchHistory').head())
+                                       'search_history').head())
 
         else:
             print("Bad input, please refer to the menu for correct input")
@@ -201,8 +205,8 @@ def main():
 
         answer = user_input(help_level)
         help_level = ""
-
     print("Thank you!")
-        
+
+    
 if __name__ == '__main__':
     main()
