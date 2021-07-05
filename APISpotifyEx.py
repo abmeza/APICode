@@ -83,13 +83,18 @@ def playlist_json_to_dataframe(playlist):
 # @para dataframe: DataFrame being converted
 # @para  database: string name of database
 # @para     table: string name of table
+# @para    exists: string of if exists paramater, default 'replace'
 # @return: None
-def create_database_table(dataframe, database, table): 
+def create_database_table(dataframe, database, table, exists): 
     os.system('mysql -u root -pcodio -e "CREATE DATABASE IF NOT EXISTS '
               + database + '; "')
     engine = create_engine('mysql://root:codio@localhost/' + database)
-    dataframe.to_sql(table, con=engine,
-                          if_exists='replace', index=True)
+    if (exists == 'append'):
+        dataframe.to_sql(table, con=engine,
+                         if_exists=exists, index=True)
+    else:
+        dataframe.to_sql(table, con=engine,
+                         if_exists='replace', index=True)
 
     
 # Saves database information in file specified
@@ -118,12 +123,7 @@ def load_database_from_file(database, fileName):
 def dataframe_from_table(database, table): 
     engine = create_engine('mysql://root:codio@localhost/' + database)
     return pd.read_sql_table(table, con=engine)
-  
-# @para database: string name of database
-# @para    table: string name of table
-# @return: None
-# def update_database_table(database, table):
-    
+
 
 # Handle user input to make interface of database manipulation understandable
 # @para h: string dicating what string to print
@@ -148,6 +148,7 @@ def view_songs():
     num = 100
     df = dataframe_from_table('spotify_music','today_top_hits')
     history = dataframe_from_table('spotify_music','search_history')
+    
     print("Select song to view based on rank from 1-50, or \n"
           "input 0 to quit current prompt")
     while (num != 0):
@@ -159,23 +160,21 @@ def view_songs():
             print("Quitting loop")
         else:
             print("Invalid input")     
-    create_database_table(history, 'spotify_music', 'search_history')
+    create_database_table(history, 'spotify_music', 'search_history', 'replace')
 
-
-def main():
-    #Authentication Information
-    CLIENT_id = "2b1a105e0bf94d69924ed5789171693f"
-    SECRET_id = "487346bb76a54e05b308947a10a96ebe"
-    access_token = get_access_token(CLIENT_id, SECRET_id)
-
-    playlist_id = '37i9dQZF1DXcBWIGoYBM5M'   # Todays top hits 50
-    playlist = get_playlist_json(playlist_id, access_token)
-
-    todayTopHitsdf = playlist_json_to_dataframe(playlist)
-
-    #User Input to manipulate database
+# Function to hold user interface that allows for the manipulation
+# of tracks from the given spotify playlist 
+# @para dataframe: dataframe of input playlist
+def user_interface_playlist_viewer(dataframe):
     help_level = "menu"
     answer = user_input(help_level)
+
+    # Create table if they do not exist to avoid errors
+    create_database_table(pd.DataFrame(), 'spotify_music',
+                          'search_history', 'append')
+    create_database_table(pd.DataFrame(), 'spotify_music',
+                          'today_top_hits', 'append')
+
     while (answer is not 0):
         # Exit loop
         if (answer == '0'):
@@ -184,8 +183,8 @@ def main():
 
         # Update 'today_top_hits' playlist table        
         elif (answer == '1'):
-            create_database_table(todayTopHitsdf,
-                                  'spotify_music','today_top_hits')
+            create_database_table(dataframe, 'spotify_music',
+                                  'today_top_hits', 'replace')
             save_database_in_file('spotify_music','spotifyMusicFile')
             print("Updated the file!")
 
@@ -205,7 +204,23 @@ def main():
 
         answer = user_input(help_level)
         help_level = ""
-    print("Thank you!")
+    print("Thank you!")  
+  
+  
+def main():
+    #Authentication Information
+    CLIENT_id = "2b1a105e0bf94d69924ed5789171693f"
+    SECRET_id = "487346bb76a54e05b308947a10a96ebe"
+    access_token = get_access_token(CLIENT_id, SECRET_id)
+
+    playlist_id = '37i9dQZF1DXcBWIGoYBM5M'   # Todays top hits 50
+    playlist = get_playlist_json(playlist_id, access_token)
+
+    todayTopHitsdf = playlist_json_to_dataframe(playlist)
+    
+    # User Input to manipulate database
+    user_interface_playlist_viewer(todayTopHitsdf)
+    
 
     
 if __name__ == '__main__':
