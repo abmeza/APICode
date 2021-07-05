@@ -4,6 +4,7 @@ import os
 import pandas as pd
 from sqlalchemy import create_engine
 
+# Gets access token to use spotify API
 # @para   cid: str value Client ID
 # @para   sid: str value Secret ID
 # @return token: str val of access token
@@ -22,6 +23,7 @@ def get_access_token(cid, sid):
     return token
 
 
+# Gets json playlist from spotify API
 # @para            pid: str value Playlist ID
 # @para   access_token: str value access token
 # @return playlist: json() information of playlist
@@ -39,6 +41,7 @@ def get_playlist_json(pid, access_token):
     return playlist
 
 
+# Parses playlist json and gives DataFrame
 # @para playlist: json() information of playlist
 # @return playlist_df: pd.DataFrame of desired information from playlist
 #                      empty DataFrame otherwise
@@ -76,6 +79,7 @@ def playlist_json_to_dataframe(playlist):
     return playlist_df
 
 
+# Create table in database based on given DataFrame
 # @para dataframe: DataFrame being converted
 # @para  database: string name of database
 # @para     table: string name of table
@@ -88,28 +92,70 @@ def create_database_table(dataframe, database, table):
                           if_exists='replace', index=True)
 
     
+# Saves database information in file specified
 # @para database: string name of database
 # @para fileName: string name of file
 # @return: None
 def save_database_in_file(database, fileName):
-    os.system("mysqldump -u root -pcodio" + database +
+    os.system('mysql -u root -pcodio -e "CREATE DATABASE IF NOT EXISTS '
+              + database + '; "')
+    os.system("mysqldump -u root -pcodio " + database +
               " > " + fileName + ".sql")
 
 
+# Load database from file to the current terminal
 # @para database: string name of database
 # @para fileName: string name of file
 # @return: None
 def load_database_from_file(database, fileName):
-    os.system("mysql -u root -pcodio " + database +
+    os.system("mysql -u root -pcodio " + database + 
               " < " + fileName + ".sql")
-  
 
+# Make DataFrame from database table
+# @para  database: string name of database
+# @para     table: string name of table
+# @return: DataFrame that is desired
+def dataframe_from_table(database, table): 
+    engine = create_engine('mysql://root:codio@localhost/' + database)
+    return pd.read_sql_table(table, con=engine)
+  
 # @para database: string name of database
 # @para    table: string name of table
 # @return: None
-# def update_database_table(database, table, )
-  
-  
+def update_database_table(database, table)
+    
+
+# Handle user input to make interface of database manipulation understandable
+# @para h: string dicating what string to print
+# @return answer: int for response
+def user_input(h)
+    if (h == "menu"):
+        print("Welcome! Do you wish to: \n" +
+                       "   (1) - Update 'Today's Top Hits' database \n" +
+                       "   (2) - Look at song in the current database \n" +
+                       "   (3) - Look at search history \n" +
+                       "   (0) - Exit")
+    else:
+        print("Give your input:")
+    answer = input()
+    return answer
+
+# Handle user inputs to get song based on rank on "Todays Top Chartrs"
+# @para:
+# @return: when finished
+def view_songs()
+    num = 0
+    while (num != ""):
+        num = input("Choose what track to see based on ranking:")
+        if (1 <= num and num <= 50):
+            print_song_info(num)
+            
+        else if (num == ""):
+            print("Quitting loop")
+        else:
+            print("Invlaid input")
+
+
 def main():
     #Authentication Information
     CLIENT_id = "2b1a105e0bf94d69924ed5789171693f"
@@ -121,9 +167,42 @@ def main():
 
     todayTopHitsdf = playlist_json_to_dataframe(playlist)
 
-    create_database_table(todayTopHitsdf,'spotify_music','today_top_hits')
+    #User Input to manipulate database
+    help_level = "menu"
+    answer = user_input(help_level)
+    
+    while (answer is not 0):
+        # Exit loop
+        if (answer == 0):
+            save_database_in_file('spotify_music','spotifyMusicFile')
+            break
 
-    save_database_in_file('spotify_music','spotifyMusicFile')
+        # Update 'today_top_hits' playlist table        
+        else if (answer == 1):
+            create_database_table(todayTopHitsdf,'spotify_music','today_top_hits')
+            save_database_in_file('spotify_music','spotifyMusicFile')
+            print("Updated the file!")
 
+        # Get song info           
+        else if (answer == 2):
+            print("Select song to view based on rank from 1-50, or click \n"
+                  "and input nothing to quit current prompt")
+            veiw_songs()
+
+        #Look at search history
+        else if (answer == 3):
+            print("Here is search history of last 5 songs")
+            print(dataframe_from_table('spotify_music', 
+                                       'searchHistory').head())
+
+        else:
+            print("Bad input, please refer to the menu for correct input")
+            help_level = "menu"
+
+        answer = user_input(help_level)
+        help_level = ""
+
+    print("Thank you!")
+        
 if __name__ == '__main__':
     main()
