@@ -3,6 +3,8 @@ import spotipy
 import os
 import pandas as pd
 from sqlalchemy import create_engine
+import matplotlib
+import matplotlib.pyplot as plt
 
 # Gets access token to use spotify API
 # @para   cid: str value Client ID
@@ -116,6 +118,7 @@ def load_database_from_file(database, fileName):
     os.system("mysql -u root -pcodio " + database + 
               " < " + fileName + ".sql")
 
+
 # Make DataFrame from database table
 # @para  database: string name of database
 # @para     table: string name of table
@@ -140,6 +143,7 @@ def user_input(h):
     answer = input()
     return answer
 
+
 # Handles inspection info of songs in database, and stores in search history 
 # database as reference
 # @para: none
@@ -162,9 +166,11 @@ def view_songs():
             print("Invalid input")     
     create_database_table(history, 'spotify_music', 'search_history', 'replace')
 
+
 # Function to hold user interface that allows for the manipulation
 # of tracks from the given spotify playlist 
 # @para dataframe: dataframe of input playlist
+# @return: when finished
 def user_interface_playlist_viewer(dataframe):
     help_level = "menu"
     answer = user_input(help_level)
@@ -206,6 +212,26 @@ def user_interface_playlist_viewer(dataframe):
         help_level = ""
     print("Thank you!")  
   
+
+# Creates plot that compares a songs 'popularity' field to the ranking 
+# it has on the playlist chart from 1 as best to 50 as lowest
+# @para         x: array of x-axis values
+# @para       x_l: string of x-axis value
+# @para         y: array of y-axis values
+# @para       y_l: string of y-axis value
+# @para     title: string title of plot
+# @para dataframe: dataframe of input data
+# @return: when finished
+def popularity_scatter(x, x_l, y, y_l, title):
+    fig = plt.figure()
+    scatter = fig.add_subplot()
+    scatter.scatter(x=x,y=y)
+    scatter.set_xlabel(x_l)
+    scatter.set_ylabel(y_l)
+    scatter.set_title(title)
+    plt.show()
+  
+    
   
 def main():
     #Authentication Information
@@ -219,9 +245,11 @@ def main():
     todayTopHitsdf = playlist_json_to_dataframe(playlist)
     
     # User Input to manipulate database
-    user_interface_playlist_viewer(todayTopHitsdf)
+    # user_interface_playlist_viewer(todayTopHitsdf)
     
-
+    popularity_scatter(todayTopHitsdf['Popularity'], 'Popularity Rank',
+                       list(range(1,51)), 'Chart Rank',
+                       'Song Popularity Based On Ranking')
     
 if __name__ == '__main__':
     main()
