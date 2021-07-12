@@ -38,7 +38,7 @@ class TestFileName(unittest.TestCase):
         myPID = '37i9dQZF1DXcBWIGoYBM5M'
         myOtherPID = '1KNl4AYfgZtOVm9KHkhPTF'
 
-        # TEST Empty string 
+        # TEST Empty string
         self.assertEqual(get_playlist_json('', ''), None)
         self.assertEqual(get_playlist_json(myPID, ''), None)
         self.assertEqual(get_playlist_json('', access_token), None)
