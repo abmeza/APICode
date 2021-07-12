@@ -246,12 +246,12 @@ def main():
     todayTopHitsdf = playlist_json_to_dataframe(playlist)
 
     # User Input to manipulate database
-    # user_interface_playlist_viewer(todayTopHitsdf)
+    user_interface_playlist_viewer(todayTopHitsdf)
 
-    # popularity_scatter(todayTopHitsdf['Popularity'], 'Popularity Rank',
-    #                   list(range(1,51)), 'Chart Rank',
-    #                   'Song Popularity Based On Ranking')
-    #
+    popularity_scatter(todayTopHitsdf['Popularity'], 'Popularity Rank',
+                       list(range(1,51)), 'Chart Rank',
+                       'Song Popularity Based On Ranking')
+    
     # Extracting statistical Info
     print(todayTopHitsdf.head())
     print(todayTopHitsdf["Popularity"].mean())
