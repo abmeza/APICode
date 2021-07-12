@@ -124,7 +124,7 @@ def load_database_from_file(database, fileName):
 # @para  database: string name of database
 # @para     table: string name of table
 # @return: DataFrame that is desired
-def dataframe_from_table(database, table): 
+def dataframe_from_table(database, table):
     engine = create_engine('mysql://root:codio@localhost/' + database)
     return pd.read_sql_table(table, con=engine)
 
@@ -186,7 +186,7 @@ def user_interface_playlist_viewer(dataframe):
     while (answer is not 0):
         # Exit loop
         if (answer == '0'):
-            save_database_in_file('spotify_music','spotifyMusicFile')
+            save_database_in_file('spotify_music', 'spotifyMusicFile')
             break
 
         # Update 'today_top_hits' playlist table        
@@ -244,14 +244,14 @@ def main():
     playlist = get_playlist_json(playlist_id, access_token)
 
     todayTopHitsdf = playlist_json_to_dataframe(playlist)
-    
+
     # User Input to manipulate database
     # user_interface_playlist_viewer(todayTopHitsdf)
-    
+
     # popularity_scatter(todayTopHitsdf['Popularity'], 'Popularity Rank',
     #                   list(range(1,51)), 'Chart Rank',
     #                   'Song Popularity Based On Ranking')
-
+    #
     # Extracting statistical Info
     print(todayTopHitsdf.head())
     print(todayTopHitsdf["Popularity"].mean())
