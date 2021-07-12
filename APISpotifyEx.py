@@ -189,21 +189,21 @@ def user_interface_playlist_viewer(dataframe):
             save_database_in_file('spotify_music', 'spotifyMusicFile')
             break
 
-        # Update 'today_top_hits' playlist table        
+        # Update 'today_top_hits' playlist table
         elif (answer == '1'):
             create_database_table(dataframe, 'spotify_music',
                                   'today_top_hits', 'replace')
             save_database_in_file('spotify_music', 'spotifyMusicFile')
             print("Updated the file!")
 
-        # Get song info           
+        # Get song info
         elif (answer == '2'):
             view_songs()
 
         # Look at search history
         elif (answer == '3'):
             print("Here is search history of last 5 songs")
-            print(dataframe_from_table('spotify_music', 
+            print(dataframe_from_table('spotify_music',
                                        'search_history').head())
 
         else:
@@ -212,10 +212,10 @@ def user_interface_playlist_viewer(dataframe):
 
         answer = user_input(help_level)
         help_level = ""
-    print("Thank you!")  
+    print("Thank you!")
 
 
-# Creates plot that compares a songs 'popularity' field to the ranking 
+# Creates plot that compares a songs 'popularity' field to the ranking
 # it has on the playlist chart from 1 as best to 50 as lowest
 # @para         x: array of x-axis values
 # @para       x_l: string of x-axis value
