@@ -145,7 +145,7 @@ def user_input(h):
     return answer
 
 
-# Handles inspection info of songs in database, and stores in search history 
+# Handles inspection info of songs in database, and stores in search history
 # database as reference
 # @para: none
 # @return: when finished
@@ -193,7 +193,7 @@ def user_interface_playlist_viewer(dataframe):
         elif (answer == '1'):
             create_database_table(dataframe, 'spotify_music',
                                   'today_top_hits', 'replace')
-            save_database_in_file('spotify_music','spotifyMusicFile')
+            save_database_in_file('spotify_music', 'spotifyMusicFile')
             print("Updated the file!")
 
         # Get song info           
