@@ -164,7 +164,7 @@ def view_songs():
         elif (num == 0):
             print("Quitting loop")
         else:
-            print("Invalid input")     
+            print("Invalid input")
     create_database_table(history, 'spotify_music', 'search_history',
                           'replace')
 
@@ -227,7 +227,7 @@ def user_interface_playlist_viewer(dataframe):
 def popularity_scatter(x, x_l, y, y_l, title):
     fig = plt.figure()
     scatter = fig.add_subplot()
-    scatter.scatter(x=x,y=y)
+    scatter.scatter(x=x, y=y)
     scatter.set_xlabel(x_l)
     scatter.set_ylabel(y_l)
     scatter.set_title(title)
