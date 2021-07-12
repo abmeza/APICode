@@ -170,7 +170,7 @@ def view_songs():
 
 
 # Function to hold user interface that allows for the manipulation
-# of tracks from the given spotify playlist 
+# of tracks from the given spotify playlist
 # @para dataframe: dataframe of input playlist
 # @return: when finished
 def user_interface_playlist_viewer(dataframe):
