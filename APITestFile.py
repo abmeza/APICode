@@ -35,7 +35,7 @@ class TestFileName(unittest.TestCase):
 
         # Constants
         playlist = None
-        myPID = '37i9dQZF1DXcBWIGoYBM5M' 
+        myPID = '37i9dQZF1DXcBWIGoYBM5M'
         myOtherPID = '1KNl4AYfgZtOVm9KHkhPTF'
 
         # TEST Empty string 
