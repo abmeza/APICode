@@ -255,9 +255,9 @@ def main():
     # Extracting statistical Info
     print(todayTopHitsdf.head())
     print(todayTopHitsdf["Popularity"].mean())
-    
     print(todayTopHitsdf["Popularity"].describe())
-    print(todayTopHitsdf[["Add Date", "Popularity"]].groupby("Add Date").mean())
+    print(todayTopHitsdf[["Add Date", 
+                          "Popularity"]].groupby("Add Date").mean())
 
 
 if __name__ == '__main__':
