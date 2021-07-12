@@ -6,6 +6,7 @@ from sqlalchemy import create_engine
 import matplotlib
 import matplotlib.pyplot as plt
 
+
 # Gets access token to use spotify API
 # @para   cid: str value Client ID
 # @para   sid: str value Secret ID
@@ -18,7 +19,7 @@ def get_access_token(cid, sid):
         'grant_type': 'client_credentials',
         'client_id': cid,
         'client_secret': sid,
-    }) # Access token request
+    })   # Access token request
 
     if (response.status_code == 200):
         token = response.json()['access_token']
@@ -87,7 +88,7 @@ def playlist_json_to_dataframe(playlist):
 # @para     table: string name of table
 # @para    exists: string of if exists paramater, default 'replace'
 # @return: None
-def create_database_table(dataframe, database, table, exists): 
+def create_database_table(dataframe, database, table, exists):
     os.system('mysql -u root -pcodio -e "CREATE DATABASE IF NOT EXISTS '
               + database + '; "')
     engine = create_engine('mysql://root:codio@localhost/' + database)
@@ -98,7 +99,7 @@ def create_database_table(dataframe, database, table, exists):
         dataframe.to_sql(table, con=engine,
                          if_exists='replace', index=True)
 
-    
+
 # Saves database information in file specified
 # @para database: string name of database
 # @para fileName: string name of file
@@ -134,10 +135,10 @@ def dataframe_from_table(database, table):
 def user_input(h):
     if (h == "menu"):
         print("Welcome! Do you wish to: \n" +
-                       "   (1) - Update 'Today's Top Hits' database \n" +
-                       "   (2) - Look at song in the current database \n" +
-                       "   (3) - Look at search history \n" +
-                       "   (0) - Exit")
+              "   (1) - Update 'Today's Top Hits' database \n" +
+              "   (2) - Look at song in the current database \n" +
+              "   (3) - Look at search history \n" +
+              "   (0) - Exit")
     else:
         print("Give your input:")
     answer = input()
@@ -150,8 +151,8 @@ def user_input(h):
 # @return: when finished
 def view_songs():
     num = 100
-    df = dataframe_from_table('spotify_music','today_top_hits')
-    history = dataframe_from_table('spotify_music','search_history')
+    df = dataframe_from_table('spotify_music', 'today_top_hits')
+    history = dataframe_from_table('spotify_music', 'search_history')
     
     print("Select song to view based on rank from 1-50, or \n"
           "input 0 to quit current prompt")
@@ -164,7 +165,8 @@ def view_songs():
             print("Quitting loop")
         else:
             print("Invalid input")     
-    create_database_table(history, 'spotify_music', 'search_history', 'replace')
+    create_database_table(history, 'spotify_music', 'search_history',
+                          'replace')
 
 
 # Function to hold user interface that allows for the manipulation
@@ -198,7 +200,7 @@ def user_interface_playlist_viewer(dataframe):
         elif (answer == '2'):
             view_songs()
 
-        #Look at search history
+        # Look at search history
         elif (answer == '3'):
             print("Here is search history of last 5 songs")
             print(dataframe_from_table('spotify_music', 
@@ -211,7 +213,7 @@ def user_interface_playlist_viewer(dataframe):
         answer = user_input(help_level)
         help_level = ""
     print("Thank you!")  
-  
+
 
 # Creates plot that compares a songs 'popularity' field to the ranking 
 # it has on the playlist chart from 1 as best to 50 as lowest
@@ -230,9 +232,8 @@ def popularity_scatter(x, x_l, y, y_l, title):
     scatter.set_ylabel(y_l)
     scatter.set_title(title)
     plt.show()
-  
 
-  
+
 def main():
     #Authentication Information
     CLIENT_id = "2b1a105e0bf94d69924ed5789171693f"
@@ -255,6 +256,7 @@ def main():
     # Extracting statistical Info
     print(todayTopHitsdf.head())
     print(todayTopHitsdf["Popularity"].mean())
-   
+
+
 if __name__ == '__main__':
     main()
