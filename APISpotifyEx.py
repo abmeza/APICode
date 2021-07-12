@@ -116,7 +116,7 @@ def save_database_in_file(database, fileName):
 # @para fileName: string name of file
 # @return: None
 def load_database_from_file(database, fileName):
-    os.system("mysql -u root -pcodio " + database + 
+    os.system("mysql -u root -pcodio " + database +
               " < " + fileName + ".sql")
 
 
@@ -153,14 +153,14 @@ def view_songs():
     num = 100
     df = dataframe_from_table('spotify_music', 'today_top_hits')
     history = dataframe_from_table('spotify_music', 'search_history')
-    
+
     print("Select song to view based on rank from 1-50, or \n"
           "input 0 to quit current prompt")
     while (num != 0):
         num = int(input("Choose what track to see based on ranking:"))
         if (1 <= num and num <= 50):
             print(df.iloc[[num-1]])
-            history = pd.concat([df.iloc[[num-1]],history])
+            history = pd.concat([df.iloc[[num-1]], history])
         elif (num == 0):
             print("Quitting loop")
         else:
@@ -235,7 +235,7 @@ def popularity_scatter(x, x_l, y, y_l, title):
 
 
 def main():
-    #Authentication Information
+    # Authentication Information
     CLIENT_id = "2b1a105e0bf94d69924ed5789171693f"
     SECRET_id = "487346bb76a54e05b308947a10a96ebe"
     access_token = get_access_token(CLIENT_id, SECRET_id)
@@ -248,10 +248,9 @@ def main():
     # User Input to manipulate database
     # user_interface_playlist_viewer(todayTopHitsdf)
     
-    #popularity_scatter(todayTopHitsdf['Popularity'], 'Popularity Rank',
+    # popularity_scatter(todayTopHitsdf['Popularity'], 'Popularity Rank',
     #                   list(range(1,51)), 'Chart Rank',
     #                   'Song Popularity Based On Ranking')
-    
 
     # Extracting statistical Info
     print(todayTopHitsdf.head())

@@ -1,4 +1,3 @@
-import requests
 import unittest
 import pandas as pd
 from APISpotifyEx import (get_access_token,
@@ -45,7 +44,8 @@ class TestFileName(unittest.TestCase):
         self.assertEqual(get_playlist_json('', access_token), None)
 
         # TEST Random string
-        self.assertEqual(get_playlist_json('raq4tctcfheagvsa', 'rh4y5yh4eu63uu'),
+        self.assertEqual(get_playlist_json('raq4tctcfheagvsa',
+                                           'rh4y5yh4eu63uu'),
                          None)
         self.assertEqual(get_playlist_json(myOtherPID, '4hjb231yr3yb25'),
                          None)
