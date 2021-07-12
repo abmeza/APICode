@@ -1,3 +1,4 @@
+import requests
 import unittest
 import pandas as pd
 from APISpotifyEx import (get_access_token,
