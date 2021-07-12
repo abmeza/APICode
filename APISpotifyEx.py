@@ -256,7 +256,7 @@ def main():
     print(todayTopHitsdf.head())
     print(todayTopHitsdf["Popularity"].mean())
     print(todayTopHitsdf["Popularity"].describe())
-    print(todayTopHitsdf[["Add Date", 
+    print(todayTopHitsdf[["Add Date",
                           "Popularity"]].groupby("Add Date").mean())
 
 
