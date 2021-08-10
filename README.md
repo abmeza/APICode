@@ -12,3 +12,6 @@
 * Creates databases to store information
 * Uses loop to access allow for user interface and access information
 
+## Some Data
+* Through this function we have been able to discover that most music is rated to be popular if they are in this playlist
+* Outliers exist where a few songs reach the top charts but are not truly that popular as well
